@@ -1,0 +1,8 @@
+node_modules/
+test-results.xml
+.env
+.env-test
+redis-data/
+db/
+lib
+docs
