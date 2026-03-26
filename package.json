@@ -19,6 +19,7 @@
   "homepage": "https://github.com/uraaa/cin7-hubspot#readme",
   "dependencies": {
     "@hubspot/api-client": "^13.5.0",
+    "@uraaa/cin7": "file:packages/cin7",
     "axios": "^1.13.6",
     "bullmq": "^5.71.1",
     "fastify": "^5.8.4",
