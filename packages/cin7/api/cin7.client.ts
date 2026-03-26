@@ -49,7 +49,7 @@ export class Cin7Client {
             const response = await this.client.get('/ref/productavailability', {
                 params: {
                     Sku: sku,
-                    Limit: 10
+                    Limit: 100
                 }
             });
             return response.data.ProductAvailabilityList;
