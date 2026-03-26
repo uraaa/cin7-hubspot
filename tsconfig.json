@@ -2,11 +2,11 @@
   "compilerOptions": {
     "target": "es2024",
     "module": "commonjs",
-    "rootDir": "src",
+    "rootDir": ".",
     "outDir": "dist",
     "strict": true,
     "esModuleInterop": true,
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
       "@shared/*": ["src/shared/*"],
       "@modules/*": ["src/modules/*"],

@@ -1,4 +1,5 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
+import { logger } from '@config/logger';
 
 export abstract class BaseWebhookController {
     async handle(request: FastifyRequest, reply: FastifyReply) {
@@ -6,7 +7,7 @@ export abstract class BaseWebhookController {
             await this.process(request.body);
             return reply.status(200).send({ success: true });
         } catch (error) {
-            console.error('Webhook error:', error);
+            logger.error({ error }, 'Failed to process webhook');
             return reply.status(500).send({
                 success: false,
                 message: 'Webhook processing failed',
