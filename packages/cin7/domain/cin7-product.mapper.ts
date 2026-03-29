@@ -19,7 +19,14 @@ export function mapAvailabilityToWarehouseStocks(availability?: any[]): Record<s
     return availability
         .filter(item => item.Location?.trim().endsWith('Warehouse'))
         .reduce<Record<string, number>>((acc, item) => {
-          acc[item.Location!] = item.Available ?? 0;
-          return acc;
+            const location = item.Location!;
+            const qty = item.Available ?? 0;
+
+            if (!acc[location]) {
+                acc[location] = 0;
+            }
+
+            acc[location] += qty;
+            return acc;
         }, {});
 }

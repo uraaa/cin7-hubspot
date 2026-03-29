@@ -1,5 +1,6 @@
 import { HubspotProductService, HubspotClient } from '@uraaa/hubspot';
 import { hubspotLogger } from '@config/logger';
+import { mapAvailabilityToHubspotStocks } from '@modules/cin7-hubspot/mappers/cin7-to-hubspot.mapper';
 
 export class SyncProductStocksUseCase {
     constructor(
@@ -16,10 +17,9 @@ export class SyncProductStocksUseCase {
                 hubspotLogger.warn({ sku }, 'Product not found in HubSpot');
                 return;
             }
-
-            await this.hubspotClient.updateProduct(product.id, {
-                warehouse_stocks: JSON.stringify(stocks),
-            });
+            
+            const hubspotStocks = mapAvailabilityToHubspotStocks(stocks);
+            await this.hubspotClient.updateProduct(product.id, { hubspotStocks });
 
             hubspotLogger.info({ sku }, 'Stock sync completed');
         } catch (error) {
