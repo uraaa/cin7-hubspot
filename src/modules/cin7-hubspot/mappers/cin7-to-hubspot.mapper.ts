@@ -14,12 +14,12 @@ export function mapToHubspotProduct(cin7Product: Cin7Product): HubspotProduct {
 
 export function mapAvailabilityToHubspotStocks(stocks: Record<string, number>): Record<string, number> {
     const locationMap: Record<string, string> = {
-        'California Warehouse': 'hs_stock_warehouse_ca',
-        'Illinois Warehouse': 'hs_stock_warehouse_il',
-        'Oklahoma Warehouse': 'hs_stock_warehouse_ok',
-        'Pennsylvania Warehouse': 'hs_stock_warehouse_pa',
-        'Texas Warehouse': 'hs_stock_warehouse_tx',
-        'Washington Warehouse': 'hs_stock_warehouse_wa',
+        'California Warehouse': 'stock_warehouse_ca',
+        'Illinois Warehouse': 'stock_warehouse_il',
+        'Oklahoma Warehouse': 'stock_warehouse_ok',
+        'Pennsylvania Warehouse': 'stock_warehouse_pa',
+        'Texas Warehouse': 'stock_warehouse_tx',
+        'Washington Warehouse': 'stock_warehouse_wa',
     };
 
     const result: Record<string, number> = Object.values(locationMap).reduce(
