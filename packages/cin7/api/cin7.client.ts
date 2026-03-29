@@ -3,13 +3,13 @@ import axios, { AxiosInstance } from 'axios';
 export class Cin7Client {
     private client: AxiosInstance;
 
-    constructor(private accountId: string, private apiKey: string) {
+    constructor(private accountId: string, private appKey: string) {
         this.client = axios.create({
             baseURL: 'https://inventory.dearsystems.com/ExternalApi/v2',
             headers: {
                 'Content-Type': 'application/json',
                 'api-auth-accountid': this.accountId,
-                'api-auth-applicationkey': this.apiKey,
+                'api-auth-applicationkey': this.appKey,
             },
         });
     }
@@ -24,8 +24,7 @@ export class Cin7Client {
             });
             return response.data.Products?.[0] || null;
         } catch (error: any) {
-            console.error('Cin7 getProductById error: ', error.response?.data || error.message);
-            throw new Error('Failed to fetch product from Cin7');
+            throw new Error(error.message);
         }
     }
 
@@ -39,8 +38,30 @@ export class Cin7Client {
             });
             return response.data.Products?.[0] || null;
         } catch (error: any) {
-            console.error('Cin7 getProductBySku error: ', error.response?.data || error.message);
-            throw new Error('Failed to fetch product from Cin7');
+              throw new Error(error.message);
+        }
+    }
+
+    async getProducts(page: number = 1, limit: number = 100): Promise<{
+        products: any[];
+        total: number;
+        page: number;
+    }> {
+        try {
+            const response = await this.client.get('/product', {
+                params: {
+                    Page: page,
+                    Limit: limit,
+                },
+            });
+
+            return {
+                products: response.data.Products || [],
+                total: response.data.Total || 0,
+                page: response.data.Page || page,
+            };
+        } catch (error: any) {
+            throw new Error(error.message);
         }
     }
 
@@ -54,8 +75,7 @@ export class Cin7Client {
             });
             return response.data.ProductAvailabilityList;
         } catch (error: any) {
-            console.error('Cin7 getProductAvailabilityBySku error: ', error.response?.data || error.message);
-            throw new Error('Failed to fetch product availability from Cin7');
+            throw new Error(error.message);
         }
     }
 }

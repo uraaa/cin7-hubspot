@@ -14,4 +14,27 @@ export class Cin7ProductService {
         
         return mapToCin7Product(product, stocks);
     }
+
+    async *getProductsPaginated(limit: number = 100): AsyncGenerator<{ sku: string }> {
+        let page = 1;
+        let total = 0;
+        let fetched = 0;
+
+        do {
+            const response = await this.client.getProducts(page, limit);
+            const products = response.products;
+            if (!products.length) break;
+            
+            total = response.total;
+
+            for (const product of products) {
+                if (product?.SKU) {
+                    yield { sku: product.SKU.trim() };
+                    fetched++;
+                }
+            }
+
+            page++;
+        } while (fetched < total || total === 0);
+    }
 }
