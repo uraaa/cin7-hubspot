@@ -14,18 +14,34 @@ export async function downloadFile(url: string, fileName?: string): Promise<stri
 
     const filePath = path.join(TEMP_DIR, resolvedFileName);
 
-    const response = await axios.get(url, {
+    const response = await axios({
+        url,
+        method: 'GET',
         responseType: 'stream',
+        timeout: 5000,
     });
+
+    const contentType = response.headers['content-type'];
+    const contentLength = Number(response.headers['content-length']);
+
+    if (!contentType?.startsWith('image/')) {
+        throw new Error('Invalid file type');
+    }
+
+    if (contentLength > 5 * 1024 * 1024) {
+        throw new Error('File too large');
+    }
 
     const writer = fs.createWriteStream(filePath);
 
-    return new Promise((resolve, reject) => {
-        response.data.pipe(writer);
+    response.data.pipe(writer);
 
-        writer.on('finish', () => resolve(filePath));
-        writer.on('error', reject);
+    await new Promise((res, rej) => {
+        writer.on('finish', res);
+        writer.on('error', rej);
     });
+
+    return filePath;
 }
 
 export async function downloadFileAsBuffer(url: string): Promise<Buffer> {
